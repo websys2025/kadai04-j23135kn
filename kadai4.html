@@ -20,7 +20,6 @@
                 { id: 7, name: "コーヒー", price: 170, stock: 8 },
                 { id: 8, name: "紅茶", price: 140, stock: 6 }
             ]
-
             // 商品用のクラス定義
             class Item {
                 static number = 1;
@@ -36,7 +35,6 @@
                 static showItemList(list) {
                     for (let i = 0; i < items.length; i++) {
                     console.log("id: " + items[i].id + ", name: " + items[i].name + ",  " + items[i].price + ", 残り" + items[i].stock + "個");
-                    Item.number += 1;
                     }
                     console.log("商品は以下の" + Item.number + "種類です。");
 
@@ -46,20 +44,23 @@
                     console.log("商品番号: " + items[i].id + ", 商品名: " + items[i].name + ", 金額: " + items[i].price + ", 在庫数: " + items[i].stock);
                     }
                     console.log(""); // 空行の出力
-                }
+                } // End of showItemList method
                 
                 // 商品購入の関数
                 buyItem() {          
                     if (this.stock >= 1) { 
                         console.log("商品番号: "+this.id+", 商品名: "+this.name+"を購入します。");
-                        // 課題4-2. ここにコードを書く
                         // 購入による商品の在庫削減処理
-                        
-                        // 課題4-3. ここにコードを書く
+                        this.stock--;
+                        console.log("商品番号: " + this.id + ", 商品名: " + this.name + "を購入します。");
+                        console.log("残りは" + this.stock + "個です。");
                         // 在庫用のエレメントを抽出し、HTML内の個数を更新
-                    } else console.log(this.name+"は商品の在庫がないため購入できません。");
+                        document.getElementById("stock" + this.id).textContent = this.stock;
+                    } else {
+                        console.log(this.name + "は商品の在庫がないため購入できません。");
+                    }
                 }
-            } // End of Item class
+            }
 
             // 商品テーブルのエレメント抽出
             const itemArea = document.getElementById("item_area");
@@ -69,9 +70,9 @@
             const item_list = new Array(items.length);
             const btn = new Array(items.length);
 
-            // 課題4-1. ここにコード書く
             // 商品オブジェクトの生成
             const item = new Array(items.length);
+            
             for (let i = 0; i < items.length; i++) {
                 item[i] = new Item(items[i].name, items[i].price, items[i].stock);
                 item_list[i] = item[i];
@@ -80,21 +81,16 @@
             // 課題4-2. ここにコードを書く
             // 商品表の作成
             for (let i = 0; i < item_list.length; i++) {
-            itemArea.innerHTML += `<tr>
-                <th>${item_list[i].name}</th>
-                <th>${item_list[i].price}</th>
-                <th id="stock${item_list[i].id}">${item_list[i].stock}</th>
-                <th><button type="button" onclick=func1(‘btn1’)>購入</button></th>
-            </tr>`;
+                itemArea.innerHTML += `<tr><th>${item_list[i].name}</th><th>${item_list[i].price}</th><th id="stock${item_list[i].id}">${item_list[i].stock}</th>
+                <th><button type="button" onclick=func1('ボタン1')>購入</button></th></tr>`;
             }
 
             // クリックイベント時の購入処理の設定
             for (let i=0; i<item_list.length; i++) {
                 // 課題4-3. ここにコードを書く
-                // 課題4-1, 4-2のコードが完成したら、以下のコメントを外す
-                //document.getElementById("button"+item_list[i].id).onclick = () => {
-                //    item_list[i].buyItem();
-                //}
+                document.getElementById("button"+item_list[i].id).onclick = () => {
+                    item_list[i].buyItem();
+                }
             }
             Item.showItemList(item_list);
 
